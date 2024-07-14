@@ -1,7 +1,9 @@
-const cardModel = require('../models/card.model')
-const showListItemsControllder = (req, res, next) => {
-    const nameFolder = req.params.nameFolder;
-    cardModel.getItems(nameFolder, (err, listCard) => {
+const flashCardModel = require('../models/flashCard.model')
+
+
+const showListCardControllder = (req, res, next) => {
+    const nameFlashCard = req.params.nameFlashCard;
+    flashCardModel.getItems(nameFlashCard, (err, data) => {
         if (err) {
             return res.status(404).json({
                 status: "error",
@@ -13,22 +15,31 @@ const showListItemsControllder = (req, res, next) => {
         return res.status(200).json({
             status: "success",
             message: "get list card is sucessfully",
-            listCard: listCard
+            data
+
         })
     })
 }
 
 const createCardsController = (req, res, next) => {
     const nameFolder = req.params.nameFolder
-    const {frontCard , backCard } = req.body
-    if (!nameFolder ) {
+    const { description, nameFlashCard, listCard } = req.body
+
+    if (!nameFolder) {
         return res.status(500).json({
             status: "error",
-            message: " the namefolder  is not difine"
+            message: ` the ${nameFolder}  is not difine`
         })
     } else {
-        const inforCard = {frontCard : frontCard.trim() , backCard : backCard.trim() , nameFolder: nameFolder.trim() }
-        cardModel.createItem(inforCard, (err, data) => {
+        const inforCard = {
+            nameFlashCard: nameFlashCard.trim(),
+            nameFolder: nameFolder.trim(),
+            description: description.trim(),
+            listCard: JSON.parse(listCard)
+        }
+
+
+        flashCardModel.createItem(inforCard, (err, data) => {
             if (err) {
                 return res.status(500).json({
                     status: "error",
@@ -39,53 +50,63 @@ const createCardsController = (req, res, next) => {
             return res.status(200).json({
                 status: "sucess",
                 message: "New list card  created successfully",
-                data: data
+                data
             })
         })
     }
 }
 
-const editCardController = (req, res, next) => {
-    const idCard = req.params.idCard;
-    const nameFolder = req.params.nameFolder
-    const {frontCard, backCard} = req.body
-    const inforFolder = {idCard,  nameFolder , frontCard: frontCard , backCard : backCard}
-        cardModel.editItem(inforFolder,(err,cardEdited)=>{
-            if(err){
-                return res.status(404).json({
-                    status: "error",
-                    message: err.message
-                })
-            }
-            return res.status(200).json({
-                status:"sucess  ",
-                message: "the  Card is edited successfully ",
-                cardEdited: cardEdited
+const editFlashCardController = (req, res, next) => {
+    const idFlashCard =  req.params.idFlashCard;
+    const nameFolder = req.params.nameFolder;
+    const { newNameFlashCard, newListCard, newDescription } = req.body
+    const newFlashCard = { newNameFlashCard, newDescription,idFlashCard,nameFolder,newListCard: JSON.parse(newListCard) }
+    console.log(newFlashCard)
+    flashCardModel.editItems(newFlashCard, (err, data) => {
+
+        if (err) {
+            return res.status(404).json({
+                status: "error",
+                message: err.message
             })
-        });
+        }
+        return res.status(200).json({
+            status: "sucess  ",
+            message: "the  Card is edited successfully ",
+            newFlashCard : data,newFlashCard,
+            newDescription : data.newDescription,
+            newlistCard : data.newListCard
+        })
+    });
 }
 const deleteCardController = (req, res, next) => {
-    const  idCard = req.params.idCard
-    const  nameFolder = req.params.nameFolder
-    const inforFolder = {idCard,nameFolder }
-        cardModel.deleteItem(inforFolder,(err,folderDelete)=>{
-            if(err){
-                return res.status(404).json({
-                    status: "error",
-                    message: err.message
-                })
-            }
-            return res.status(200).json({
-                status:"sucess",
-                message: `delete folder is successfully`,
-                folderDelete: folderDelete
+    const idFlashCard = req.params.idFlashCard
+    const nameFolder = req.params.nameFolder
+    const inforFolder = { idFlashCard, nameFolder }
+    flashCardModel.deleteItem(inforFolder, (err, folderDelete) => {
+        if (err) {
+            return res.status(404).json({
+                status: "error",
+                message: err.message
             })
-        });
+        }
+        return res.status(200).json({
+            status: "sucess",
+            message: `delete folder is successfully`,
+            folderDelete: folderDelete
+        })
+    });
+}
+
+const restFlashCardController = (req, res) => {
+    const nameFlashCard = req.params.nameFlashCard
+    flashCardModel.restStatus(nameFlashCard, nameFlashCard)
 }
 
 module.exports = {
-    showListItemsControllder,
+    showListCardControllder,
     createCardsController,
-    editCardController,
-    deleteCardController
+    editFlashCardController,
+    deleteCardController,
+    restFlashCardController
 }

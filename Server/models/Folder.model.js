@@ -3,7 +3,7 @@ const
         getItemsQuery,
         editItemQuery,
         deleteItemQuery }
-        = require('../repositories/flashCardQuery')
+        = require('../repositories/folderQuery')
 const pool = require('../config/connectDB')
 const systemModel = {
     async createItem(inforItem, cb) {
