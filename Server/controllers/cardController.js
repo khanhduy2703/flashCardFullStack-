@@ -57,10 +57,10 @@ const createCardsController = (req, res, next) => {
 }
 
 const editFlashCardController = (req, res, next) => {
-    const idFlashCard =  req.params.idFlashCard;
+    const oldNameFlashCard =  req.params.nameFlashCard;
     const nameFolder = req.params.nameFolder;
     const { newNameFlashCard, newListCard, newDescription } = req.body
-    const newFlashCard = { newNameFlashCard, newDescription,idFlashCard,nameFolder,newListCard: JSON.parse(newListCard) }
+    const newFlashCard = { newNameFlashCard, newDescription,oldNameFlashCard,nameFolder,newListCard: JSON.parse(newListCard) }
     console.log(newFlashCard)
     flashCardModel.editItems(newFlashCard, (err, data) => {
 
@@ -80,9 +80,9 @@ const editFlashCardController = (req, res, next) => {
     });
 }
 const deleteCardController = (req, res, next) => {
-    const idFlashCard = req.params.idFlashCard
     const nameFolder = req.params.nameFolder
-    const inforFolder = { idFlashCard, nameFolder }
+    const nameFlashCard = req.params.nameFlashCard
+    const inforFolder = {  nameFolder , nameFlashCard }
     flashCardModel.deleteItem(inforFolder, (err, folderDelete) => {
         if (err) {
             return res.status(404).json({

@@ -7,7 +7,9 @@ const
         resetStatusFlashCardQuery,
         createNewFlashCard,
         editFlashCard,
-        deleteFlashCard
+        deleteFlashCard,
+        deleteTempararyFK,
+        addFKforCard
     }
         = require('../repositories/flashCardQuery')
 const pool = require('../config/connectDB');
@@ -44,15 +46,15 @@ const cardModel = {
         }
     },
     async editItems(newFlashCard, cb) {
-        const { newNameFlashCard , newDescription , newListCard , idFlashCard , nameFolder} = newFlashCard ;
-        console.log(newFlashCard)
+        const { newNameFlashCard , newDescription , newListCard , oldNameFlashCard , nameFolder} = newFlashCard ;
         try {
-             
-                pool.query(editFlashCard,[newNameFlashCard,newDescription , idFlashCard , nameFolder])
+          await  pool.query(deleteTempararyFK)
+          await  pool.query(editFlashCard,[newNameFlashCard,newDescription , oldNameFlashCard , nameFolder])
                 for (const i in newListCard) {
                     const {frontCard , backCard , status , imagesCard} = newListCard[i];
-                    pool.query(editCardQuery,[frontCard , backCard , status , imagesCard , idFlashCard])
+                   await pool.query(editCardQuery,[frontCard , backCard , status , imagesCard , newNameFlashCard , oldNameFlashCard])
                 }
+         await   pool.query(addFKforCard)
              
             cb(null, {newFlashCard , newDescription , newListCard })
         } catch (error) {
@@ -61,10 +63,10 @@ const cardModel = {
         }
     },
     async deleteItem(inforItem, cb) {
-        const { idFlashCard, nameFolder } = inforItem
+        const {  nameFolder , nameFlashCard } = inforItem
         try {
-            await pool.query(deleteCardQuery, [idFlashCard])
-            await pool.query(deleteFlashCard , [idFlashCard , nameFolder])
+            await pool.query(deleteCardQuery, [nameFlashCard])
+            await pool.query(deleteFlashCard , [nameFlashCard , nameFolder])
             cb(null, { idFlashCard, nameFolder })
         } catch (error) {
             console.log(error)

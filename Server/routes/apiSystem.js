@@ -5,16 +5,16 @@ const {showListCardControllder , createCardsController,editFlashCardController,d
 
 // flashCardRoutes
 
-routes.use('/user/:nameUser/folders/:nameFolder/:nameFlashCard/create',createCardsController);
+routes.use('/user/:nameUser/folders/:nameFolder/create',createCardsController);
 // show listCard of flashCard 
 routes.use('/user/:nameUser/folders/:nameFolder/:nameFlashCard/show',showListCardControllder);
 // edit include :
 // flashCard :  nameflashCard , descrition 
 // listCard : frontCard , backCard , status , imgaesCard 
-routes.use('/user/:nameUser/folders/:nameFolder/:idFlashCard/edits',editFlashCardController);
+routes.use('/user/:nameUser/folders/:nameFolder/:nameFlashCard/edits',editFlashCardController);
 //  delete flashCard : 
 // flashCard and list Card of flashcard 
-routes.use('/user/:nameUser/folders/:nameFolder/:idFlashCard/delete',deleteCardController);
+routes.use('/user/:nameUser/folders/:nameFolder/:nameFlashCard/delete',deleteCardController);
 routes.use('/user/:nameUser/folders/:nameFolder/reset',restFlashCardController)
 
 
