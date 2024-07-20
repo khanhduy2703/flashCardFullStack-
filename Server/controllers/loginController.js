@@ -5,8 +5,6 @@ const loginController = (req,res,next)=> {
     const users = req.body
  try {
         userModel.checkInforLogin(users,(err,data)=>{
-        
-      
             if(err){
                 if(err.kind == "not found"){
                     return res.status(404).json({
@@ -18,24 +16,19 @@ const loginController = (req,res,next)=> {
             if(data[0].account == users.account ){
                 const token = generate(data.account);
                 const hashPassword = data[0].password;
-                console.log(compare(users.password ,hashPassword))
                 if(compare(users.password,hashPassword)){
                     return res.status(200).json({
                         status : "Success",
                         message: "login sucessfully ",
                         token : token,
-                        user :data
-                        
-                        
+                        user :data  
                     })
                 }else{
                     return res.status(500).json({
                         status : "error",
                         message:"paswword is wrong",
                     })
-                }
-             
-
+                }            
             }
         })
  } catch (error) {

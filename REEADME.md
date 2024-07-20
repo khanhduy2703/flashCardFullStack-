@@ -7,6 +7,8 @@
     -  nơi chứa các câu query của database
 ## Routes
     -  nơi định tuyến các tuyến đường cho api
+## Service 
+    - xử lý các logic phức tạp 
 ## models
     -  nơi thực hiện các câu query và lấy dữ liệu từ database
 ## untils

@@ -1,11 +1,11 @@
-require('dotenv').config()
+const {DB_NAME , DB_TABLE_FOLDER} = require("../utils/secrets")
 
-const createNewItemQuery =`INSERT INTO ${process.env.DB_NAME}.${process.env.DB_TABLE_FOLDER}(nameFolder , nameUser) VALUES(?, ?)`;
-const getItemsQuery =  `SELECT * FROM ${process.env.DB_NAME}.${process.env.DB_TABLE_FOLDER} WHERE nameUser = ?`
+const createNewItemQuery =`INSERT INTO ${DB_NAME}.${DB_TABLE_FOLDER}(name_folder , id_user) VALUES(?, ?)`;
+const getItemsQuery =  `SELECT * FROM ${DB_NAME}.${DB_TABLE_FOLDER} WHERE id_user = ?`
 const editItemQuery =
- `UPDATE ${process.env.DB_NAME}.${process.env.DB_TABLE_FOLDER} SET nameFolder = ? WHERE idFolder = ? and nameUser = ? ; 
+ `UPDATE ${DB_NAME}.${DB_TABLE_FOLDER} SET name_folder = ? WHERE id_Folder = ? and id_user = ? ; 
  `
-const deleteItemQuery= `DELETE FROM ${process.env.DB_NAME}.${process.env.DB_TABLE_FOLDER} WHERE idFolder = ? and nameUser = ? `
+const deleteItemQuery= `DELETE FROM ${DB_NAME}.${DB_TABLE_FOLDER} WHERE id_Folder = ? and id_user = ? `
 
 
 

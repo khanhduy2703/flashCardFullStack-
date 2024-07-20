@@ -7,16 +7,18 @@ const
 const pool = require('../config/connectDB')
 const systemModel = {
     async createItem(inforItem, cb) {
+        const {nameFolder  , id } = inforItem
         try {
-            await pool.query(createNewItemQuery, [inforItem.nameItem, inforItem.obj]);
-            cb(null, { nameFolder: inforItem.nameItem, nameUser: inforItem.obj })
+            await pool.query(createNewItemQuery, [nameFolder  , id ]);
+            cb(null, { id , nameFolder   })
         } catch (error) {
+            console.log(error)
             cb(error, null)
         }
     },
-    async getItems(obj, cb) {
+    async getItems(idUser, cb) {
         try {
-            const [listItem] = await pool.query(getItemsQuery, [obj]);
+            const [listItem] = await pool.query(getItemsQuery, [idUser]);
             cb(null, listItem)
         } catch (error) {
             console.log(error)
@@ -24,19 +26,20 @@ const systemModel = {
         }
     },
     async editItem(inforItem, cb) {
-        const { idItem, obj, newName } = inforItem
+        const { idFolder, idUser, newName } = inforItem
         try {
-          await  pool.query(editItemQuery, [newName,idItem, obj])
+          await  pool.query(editItemQuery, [newName,idFolder, idUser])
             cb(null, inforItem)
         } catch (error) {
+            console.log(error)
             cb(error, null)
         }
     },
     async deleteItem(inforItem, cb) {
-        const {idItem, obj} = inforItem
+        const {idFolder , idUser} = inforItem
         try {
-            await pool.query(deleteItemQuery,[idItem, obj])
-            cb(null,{idItem, obj})
+           await pool.query(deleteItemQuery,[idFolder , idUser])
+            cb(null,{idFolder })
         } catch (error) {
             cb(error,null)
         }

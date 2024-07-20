@@ -3,7 +3,7 @@ const express = require('express');
 const morgan = require('morgan');
 const port  = 8080;
 const routes = require('./routes/index');
-const connection = require('./config/connectDB')
+const pool = require('./config/connectDB')
 
 // create aap express
 const app = express();
@@ -20,7 +20,14 @@ app.use((req,res)=>{
     )
 })
 // listening port 
-
+pool.getConnection(async function (err, connection) {
+    if (err instanceof Error) {
+      console.log(err);
+      return;
+    }
+    console.log(`connection database   sucessfully `)
+    connection.release();
+  });
 app.listen(port,()=>{  
     console.log(`listening sucessful port ${port}`)
 })

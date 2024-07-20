@@ -5,24 +5,24 @@ const {showListCardControllder , createCardsController,editFlashCardController,d
 
 // flashCardRoutes
 
-routes.use('/user/:nameUser/folders/:nameFolder/create',createCardsController);
+routes.use('/user/:nameUser/folders/:nameFolder/:id/create',createCardsController);
 // show listCard of flashCard 
 routes.use('/user/:nameUser/folders/:nameFolder/:nameFlashCard/show',showListCardControllder);
 // edit include :
 // flashCard :  nameflashCard , descrition 
 // listCard : frontCard , backCard , status , imgaesCard 
-routes.use('/user/:nameUser/folders/:nameFolder/:nameFlashCard/edits',editFlashCardController);
+routes.use('/user/:nameUser/folders/:idFolder/:nameFolder/:nameFlashCard/edits',editFlashCardController);
 //  delete flashCard : 
 // flashCard and list Card of flashcard 
-routes.use('/user/:nameUser/folders/:nameFolder/:nameFlashCard/delete',deleteCardController);
+routes.use('/user/:nameUser/folders/:nameFolder/:idFolder/:nameFlashCard/delete',deleteCardController);
 routes.use('/user/:nameUser/folders/:nameFolder/reset',restFlashCardController)
 
 
 // foldersRoutes
-routes.use('/user/:nameUser/id/:idfolder/delete', deleteFolderController)
-routes.use('/user/:nameUser/id/:idfolder/edit', editFolderController)
-routes.use('/user/:nameUser/store',showListFolderControllder);
-routes.use('/user/:nameUser/createNewFolder',createFloderController);
+routes.use('/user/:nameUser/:id/id-folder/:idfolder/delete', deleteFolderController)
+routes.use('/user/:nameUser/:id/id-folder/:idfolder/edit', editFolderController)
+routes.use('/user/:nameUser/:id/store',showListFolderControllder);
+routes.use('/user/:nameUser/:id/create-new-folder',createFloderController);
 // home page
 routes.use('/',(req,res,next)=>{
     return res.json({

@@ -3,14 +3,14 @@ const systemModel = require('../models/Folder.model')
 
 const createFloderController = (req, res, next) => {
     const { nameFolder } = req.body
-    const user = req.params.nameUser
-    if (!nameFolder || !user) {
+    const  id = req.params.id
+    if (!nameFolder ) {
         return res.status(500).json({
             status: "error",
-            message: " the namefolder and user is not difine"
+            message: " the namefolder  is the emty"
         })
     } else {
-        const inforFolder = {nameItem: nameFolder.trim(), obj: user.trim() }
+        const inforFolder = {nameFolder: nameFolder.trim(),  id }
         systemModel.createItem(inforFolder, (err, data) => {
             if (err) {
                 return res.status(500).json({
@@ -30,7 +30,8 @@ const createFloderController = (req, res, next) => {
 
 const showListFolderControllder = (req, res, next) => {
     const nameUser = req.params.nameUser;
-    systemModel.getItems(nameUser, (err, listFolder) => {
+    const idUser = req.params.id
+    systemModel.getItems(idUser, (err, listFolder) => {
         if (err) {
             return res.status(404).json({
                 status: "error",
@@ -42,15 +43,15 @@ const showListFolderControllder = (req, res, next) => {
         return res.status(200).json({
             status: "success",
             message: "get list folder is sucessfully",
-            listFolder: listFolder
+            nameUser: listFolder
         })
     })
 }
 const editFolderController = (req, res, next) => {
     const idFolder = req.params.idfolder;
-    const nameUser = req.params.nameUser
+    const idUser = req.params.id
     const {newName} = req.body
-    const inforFolder = {idItem :idFolder, obj :nameUser , newName: newName}
+    const inforFolder = {idFolder , newName , idUser}
         systemModel.editItem(inforFolder,(err,folderEdited)=>{
             if(err){
                 return res.status(404).json({
@@ -67,8 +68,8 @@ const editFolderController = (req, res, next) => {
 }
 const deleteFolderController = (req, res, next) => {
     const idFolder = req.params.idfolder;
-    const nameUser = req.params.nameUser
-    const inforFolder = {idItem:idFolder,obj:nameUser }
+    const idUser = req.params.id
+    const inforFolder = {idFolder,idUser }
         systemModel.deleteItem(inforFolder,(err,folderDelete)=>{
             if(err){
                 return res.status(404).json({

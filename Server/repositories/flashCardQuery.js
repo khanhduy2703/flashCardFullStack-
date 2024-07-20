@@ -1,39 +1,38 @@
-require('dotenv').config();
-
-
-
+const { DB_NAME, DB_TABLE_CARD, DB_TABLE_FLASHCARD } = require('../utils/secrets');
 // card 
 const createNewListCardQuery =
-`INSERT INTO ${process.env.DB_NAME}.${process.env.DB_TABLE_CARD}
-(frontCard , backCard , nameFlashCard  , status , imagesCard)
+  `INSERT INTO ${DB_NAME}.${DB_TABLE_CARD}
+(front_card , back_card , name_flash_card  , status , image_card)
  VALUES(?, ? , ? , ? , ?  )`;
-const getListCardsQuery = 
- `SELECT * FROM ${process.env.DB_NAME}.${process.env.DB_TABLE_CARD} WHERE nameFlashCard = ?`;
+const getListCardsQuery =
+  `SELECT * FROM ${DB_NAME}.${DB_TABLE_CARD} WHERE name_flash_card  = ?`;
 const editCardQuery =
- `UPDATE ${process.env.DB_NAME}.${process.env.DB_TABLE_CARD} SET frontCard = ? , backCard = ?  , status = ? , imagesCard = ? ,nameFlashCard = ?  WHERE nameFlashCard = ? ; `;
-const deleteCardQuery= 
-`DELETE FROM ${process.env.DB_NAME}.${process.env.DB_TABLE_CARD} WHERE  nameFlashCard = ?  `;
+  `UPDATE ${DB_NAME}.${DB_TABLE_CARD} SET front_card = ? , back_card = ?  , status = ? , image_card = ? ,name_flash_card = ?  WHERE name_flash_card = ? ; `;
+const deleteCardQuery =
+  `DELETE FROM ${DB_NAME}.${DB_TABLE_CARD} WHERE  name_flash_card = ?  `;
 const restStatusFlashCardQuery =
- `UPDATE ${process.env.DB_NAME}.${process.env.DB_TABLE_CARD} SET status = 0 WHERE status = 1  and nameFlashCard = ?`
+  `UPDATE ${DB_NAME}.${DB_TABLE_CARD} SET status = 0 WHERE status = 1  and name_flash_card = ?`
 
- /////// flashCard 
- const createNewFlashCard =
-  `INSERT INTO ${process.env.DB_NAME}.${process.env.DB_TABLE_FlashCard} (nameFlashCard , nameFolder,description) VALUES (?,?,?) `
+/////// flashCard 
+const getFlashCard = `SELECT * FROM ${DB_NAME}.${DB_TABLE_FLASHCARD} `
+const createNewFlashCard =
+  `INSERT INTO ${DB_NAME}.${DB_TABLE_FLASHCARD} (name_flash_card , id_folder ,description) VALUES (?,?,?) `
 const editFlashCard =
- `UPDATE ${process.env.DB_NAME}.${process.env.DB_TABLE_FlashCard} SET nameFlashCard = ? , description = ? WHERE nameFlashCard = ?  and nameFolder = ? `
- const deleteFlashCard = 
- `DELETE FROM ${process.env.DB_NAME}.${process.env.DB_TABLE_FlashCard} WHERE nameFlashCard = ? and nameFolder = ? `
-const deleteTempararyFK = `ALTER TABLE ${process.env.DB_NAME}.${process.env.DB_TABLE_CARD}  DROP FOREIGN KEY FK_nameFlashCard;`
-const addFKforCard = `ALTER TABLE ${process.env.DB_NAME}.${process.env.DB_TABLE_CARD} ADD CONSTRAINT FK_nameFlashCard FOREIGN KEY (nameFlashCard) REFERENCES lisbary_flashcard (nameFlashCard);`
+  `UPDATE ${DB_NAME}.${DB_TABLE_FLASHCARD} SET name_flash_card = ? , description = ? WHERE name_flash_card = ?  and id_folder = ? `
+const deleteFlashCard =
+  `DELETE FROM ${DB_NAME}.${DB_TABLE_FLASHCARD} WHERE name_flash_card = ? and id_folder = ? `
+const deleteTempararyFK = `ALTER TABLE ${DB_NAME}.${DB_TABLE_CARD}  DROP FOREIGN KEY FK_name_flash_card;`
+const addFKforCard = `ALTER TABLE ${DB_NAME}.${DB_TABLE_CARD} ADD CONSTRAINT FK_name_flash_card FOREIGN KEY (name_flash_card) REFERENCES lisbary_flash_card (name_flash_card);`
 module.exports = {
-    createNewListCardQuery, 
-    getListCardsQuery,
-    editCardQuery,
-    deleteCardQuery,
-    restStatusFlashCardQuery,
-    createNewFlashCard,
-    editFlashCard,
-    deleteFlashCard,
-    deleteTempararyFK,
-    addFKforCard
+  createNewListCardQuery,
+  getListCardsQuery,
+  editCardQuery,
+  deleteCardQuery,
+  restStatusFlashCardQuery,
+  createNewFlashCard,
+  editFlashCard,
+  deleteFlashCard,
+  deleteTempararyFK,
+  addFKforCard,
+  getFlashCard
 }

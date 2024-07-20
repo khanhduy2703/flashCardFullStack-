@@ -2,8 +2,9 @@ const flashCardModel = require('../models/flashCard.model')
 
 
 const showListCardControllder = (req, res, next) => {
+
     const nameFlashCard = req.params.nameFlashCard;
-    flashCardModel.getItems(nameFlashCard, (err, data) => {
+    flashCardModel.getItems(  nameFlashCard , (err, data) => {
         if (err) {
             return res.status(404).json({
                 status: "error",
@@ -22,6 +23,7 @@ const showListCardControllder = (req, res, next) => {
 }
 
 const createCardsController = (req, res, next) => {
+    const idFolder = req.params.id
     const nameFolder = req.params.nameFolder
     const { description, nameFlashCard, listCard } = req.body
 
@@ -33,7 +35,7 @@ const createCardsController = (req, res, next) => {
     } else {
         const inforCard = {
             nameFlashCard: nameFlashCard.trim(),
-            nameFolder: nameFolder.trim(),
+            idFolder: idFolder.trim(),
             description: description.trim(),
             listCard: JSON.parse(listCard)
         }
@@ -58,10 +60,9 @@ const createCardsController = (req, res, next) => {
 
 const editFlashCardController = (req, res, next) => {
     const oldNameFlashCard =  req.params.nameFlashCard;
-    const nameFolder = req.params.nameFolder;
+    const idFolder = req.params.idFolder;
     const { newNameFlashCard, newListCard, newDescription } = req.body
-    const newFlashCard = { newNameFlashCard, newDescription,oldNameFlashCard,nameFolder,newListCard: JSON.parse(newListCard) }
-    console.log(newFlashCard)
+    const newFlashCard = { newNameFlashCard, newDescription,oldNameFlashCard,idFolder,newListCard: JSON.parse(newListCard) }
     flashCardModel.editItems(newFlashCard, (err, data) => {
 
         if (err) {
@@ -80,9 +81,9 @@ const editFlashCardController = (req, res, next) => {
     });
 }
 const deleteCardController = (req, res, next) => {
-    const nameFolder = req.params.nameFolder
+    const idFolder = req.params.idFolder
     const nameFlashCard = req.params.nameFlashCard
-    const inforFolder = {  nameFolder , nameFlashCard }
+    const inforFolder = {  idFolder , nameFlashCard }
     flashCardModel.deleteItem(inforFolder, (err, folderDelete) => {
         if (err) {
             return res.status(404).json({
