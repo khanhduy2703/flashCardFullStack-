@@ -9,7 +9,12 @@ const banFlashCard =
 JOIN ${DB_NAME}.${DB_TABLE_FOLDER} ON ${DB_NAME}.${DB_TABLE_FLASHCARD}.id_folder = ${DB_NAME}.${DB_TABLE_FOLDER}.id_folder
 SET ${DB_NAME}.${DB_TABLE_FLASHCARD}.is_hidden = ?
 WHERE ${DB_NAME}.${DB_TABLE_FOLDER}.id_user = ?`
-const banCard = `UPDATE ${DB_NAME}.${DB_TABLE_CARD} SET is_hidden = ? WHERE id_flash_card `
+const banCard = 
+`UPDATE ${DB_NAME}.${DB_TABLE_CARD}
+JOIN ${DB_NAME}.${DB_TABLE_FLASHCARD} ON ${DB_NAME}.${DB_TABLE_CARD}.name_flash_card = ${DB_NAME}.${DB_TABLE_FLASHCARD}.name_flash_card
+JOIN ${DB_NAME}.${DB_TABLE_FOLDER} ON ${DB_NAME}.${DB_TABLE_FLASHCARD}.id_folder = ${DB_NAME}.${DB_TABLE_FOLDER}.id_folder
+SET ${DB_NAME}.${DB_TABLE_CARD}.is_hidden = ?
+WHERE ${DB_NAME}.${DB_TABLE_FOLDER}.id_user = ? `
 
 module.exports = {
     getResquestQuery,

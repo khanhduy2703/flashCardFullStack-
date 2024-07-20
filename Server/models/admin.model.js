@@ -1,5 +1,5 @@
 const pool = require('../config/connectDB');
-const { getResquestQuery ,setStatusUser , deleteRequest , banFolder, banFlashCard} = require('../repositories/adminQuery');
+const { getResquestQuery ,setStatusUser , deleteRequest , banFolder, banFlashCard, banCard} = require('../repositories/adminQuery');
 
 const adminModel = {
     async getResquest(cb) {
@@ -36,19 +36,25 @@ const adminModel = {
             // ban folder of user
            const [resultFolder] = await connection.query(banFolder , [0,idUser])
             if(resultFolder.affectedRows == 0 ){
-                throw new Error('error at ban user , roll back')
+                throw new Error('error at ban folder , roll back')
             }
             //
             // ban flashCard 
-           const [resultFlashCard] = await  connection.query(banFlashCard,[0,9])
+           const [resultFlashCard] = await  connection.query(banFlashCard,[0,idUser])
             if(resultFlashCard.affectedRows == 0 ){
-                throw new Error('error at ban user , roll back')
+                throw new Error('error at ban flashCard , roll back')
             }
-            //
+            //ban Card
+            const [resultCard] = await connection.query(banCard,[0,idUser])
+            console.log(resultCard)
+            if(resultCard.affectedRows == 0 ){
+                throw new Error('error at ban card , roll back ')
+            }
            await connection.commit() 
             cb(null,{idUser})
         } catch (error) {
            if(connection) await connection.rollback();
+           console.log(error)
                 cb(error,null)
            await connection.release()
         }
