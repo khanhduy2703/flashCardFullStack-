@@ -15,3 +15,5 @@ deleteFlashCard => recevive resquest from client => get idFlashCard and nameFold
      -  check account is exsit or not exist in database
           - if exist => res about client  
           - else  => aprove create new user 
+-----------------------------------------------
+2. fix edit in database  

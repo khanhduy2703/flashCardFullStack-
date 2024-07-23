@@ -29,7 +29,6 @@ const createFloderController = (req, res, next) => {
 }
 
 const showListFolderControllder = (req, res, next) => {
-    const nameUser = req.params.nameUser;
     const idUser = req.params.id
     systemModel.getItems(idUser, (err, listFolder) => {
         if (err) {

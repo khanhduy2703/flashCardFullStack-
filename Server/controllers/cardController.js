@@ -2,9 +2,8 @@ const flashCardModel = require('../models/flashCard.model')
 
 
 const showListCardControllder = (req, res, next) => {
-
-    const nameFlashCard = req.params.nameFlashCard;
-    flashCardModel.getItems(  nameFlashCard , (err, data) => {
+    const {idFlashCard  } = req.params
+    flashCardModel.getItem(  idFlashCard  , (err, data) => {
         if (err) {
             return res.status(404).json({
                 status: "error",
@@ -59,11 +58,10 @@ const createCardsController = (req, res, next) => {
 }
 
 const editFlashCardController = (req, res, next) => {
-    const oldNameFlashCard =  req.params.nameFlashCard;
-    const idFolder = req.params.idFolder;
+    const {idFolder,idFlashCard} = req.params
     const { newNameFlashCard, newListCard, newDescription } = req.body
-    const newFlashCard = { newNameFlashCard, newDescription,oldNameFlashCard,idFolder,newListCard: JSON.parse(newListCard) }
-    flashCardModel.editItems(newFlashCard, (err, data) => {
+    const newFlashCard = { newNameFlashCard, newDescription,idFlashCard,idFolder,newListCard: JSON.parse(newListCard) }
+    flashCardModel.editItem(newFlashCard, (err, data) => {
 
         if (err) {
             return res.status(404).json({
@@ -74,17 +72,13 @@ const editFlashCardController = (req, res, next) => {
         return res.status(200).json({
             status: "sucess  ",
             message: "the  Card is edited successfully ",
-            newFlashCard : data,newFlashCard,
-            newDescription : data.newDescription,
-            newlistCard : data.newListCard
+            data
         })
     });
 }
 const deleteCardController = (req, res, next) => {
-    const idFolder = req.params.idFolder
-    const nameFlashCard = req.params.nameFlashCard
-    const inforFolder = {  idFolder , nameFlashCard }
-    flashCardModel.deleteItem(inforFolder, (err, folderDelete) => {
+    const {idFolder,idFlashCard} = req.params
+    flashCardModel.deleteItem({idFolder,idFlashCard}, (err, data) => {
         if (err) {
             return res.status(404).json({
                 status: "error",
@@ -93,15 +87,25 @@ const deleteCardController = (req, res, next) => {
         }
         return res.status(200).json({
             status: "sucess",
-            message: `delete folder is successfully`,
-            folderDelete: folderDelete
+            message: data.message
         })
     });
 }
 
 const restFlashCardController = (req, res) => {
-    const nameFlashCard = req.params.nameFlashCard
-    flashCardModel.restStatus(nameFlashCard, nameFlashCard)
+    const {idFlashCard} = req.params
+    flashCardModel.restStatus(idFlashCard,(err , data)=>{
+        if(err){
+            return res.status(500).json({
+                status:"error",
+                message:err.message
+            })
+        }
+        return res.status(200).json({
+            status : 'sucess',
+            message:data
+        })
+    })
 }
 
 module.exports = {
