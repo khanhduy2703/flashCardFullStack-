@@ -1,4 +1,4 @@
-const systemModel = require('../models/Folder.model')
+const folderModel = require('../models/folder.model')
 
 
 const createFloderController = (req, res, next) => {
@@ -10,8 +10,7 @@ const createFloderController = (req, res, next) => {
             message: " the namefolder  is the emty"
         })
     } else {
-        const inforFolder = {nameFolder: nameFolder.trim(),  id }
-        systemModel.createItem(inforFolder, (err, data) => {
+        folderModel.createItem({nameFolder , id}, (err, data) => {
             if (err) {
                 return res.status(500).json({
                     status: "error",
@@ -30,7 +29,7 @@ const createFloderController = (req, res, next) => {
 
 const showListFolderControllder = (req, res, next) => {
     const idUser = req.params.id
-    systemModel.getItems(idUser, (err, listFolder) => {
+    folderModel.getItems(idUser, (err, listFolder) => {
         if (err) {
             return res.status(404).json({
                 status: "error",
@@ -47,11 +46,10 @@ const showListFolderControllder = (req, res, next) => {
     })
 }
 const editFolderController = (req, res, next) => {
-    const idFolder = req.params.idfolder;
-    const idUser = req.params.id
+    const {idFolder, id} = req.params;
     const {newName} = req.body
-    const inforFolder = {idFolder , newName , idUser}
-        systemModel.editItem(inforFolder,(err,folderEdited)=>{
+
+        folderModel.editItem({idFolder,newName,id},(err,folderEdited)=>{
             if(err){
                 return res.status(404).json({
                     status: "error",
@@ -66,10 +64,8 @@ const editFolderController = (req, res, next) => {
         });
 }
 const deleteFolderController = (req, res, next) => {
-    const idFolder = req.params.idfolder;
-    const idUser = req.params.id
-    const inforFolder = {idFolder,idUser }
-        systemModel.deleteItem(inforFolder,(err,folderDelete)=>{
+    const {idFolder, id} = req.params;
+        folderModel.deleteItem({idFolder,id},(err,folderDelete)=>{
             if(err){
                 return res.status(404).json({
                     status: "error",

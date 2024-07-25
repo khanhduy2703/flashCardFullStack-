@@ -5,11 +5,13 @@ const
         deleteItemQuery }
         = require('../repositories/folderQuery')
 const pool = require('../config/connectDB')
+const withTransaction = require('../service/withTransaction.mysql')
 const systemModel = {
-    async createItem(inforItem, cb) {
-        const {nameFolder  , id } = inforItem
+    async createItem({nameFolder, id}, cb) {
         try {
-            await pool.query(createNewItemQuery, [nameFolder  , id ]);
+           await withTransaction (async (connection) => {
+               await connection.query(createNewItemQuery, [nameFolder  , id ]);
+           }) 
             cb(null, { id , nameFolder   })
         } catch (error) {
             console.log(error)
@@ -18,27 +20,33 @@ const systemModel = {
     },
     async getItems(idUser, cb) {
         try {
-            const [listItem] = await pool.query(getItemsQuery, [idUser]);
+            await withTransaction(async ( connection) =>{
+                const [listItem] = await connection.query(getItemsQuery, [idUser]);
+            })
             cb(null, listItem)
         } catch (error) {
             console.log(error)
             cb(error, null)
         }
     },
-    async editItem(inforItem, cb) {
-        const { idFolder, idUser, newName } = inforItem
+    async editItem({idFolder , newName , id}, cb) {
         try {
-          await  pool.query(editItemQuery, [newName,idFolder, idUser])
+            await withTransaction( async ( connection)=>{
+
+                await  connection.query(editItemQuery, [newName,idFolder, id])
+            })
             cb(null, inforItem)
         } catch (error) {
             console.log(error)
             cb(error, null)
         }
     },
-    async deleteItem(inforItem, cb) {
-        const {idFolder , idUser} = inforItem
+    async deleteItem(  {idFolder , id} , cb) {
+       
         try {
-           await pool.query(deleteItemQuery,[idFolder , idUser])
+            await withTransaction( async (connection) => {
+                await connection.query(deleteItemQuery,[idFolder , idUser])
+            })
             cb(null,{idFolder })
         } catch (error) {
             cb(error,null)

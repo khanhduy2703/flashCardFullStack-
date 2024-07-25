@@ -16,10 +16,9 @@ const {
 } = require('../repositories/cardQuery')
 const { handleFormat } = require('../service/handleFlashCard.logic')
 const pool = require('../config/connectDB');
-const withTransaction = require('../service/withTransaction.mysql')
+const withTransaction = require('../service/withTransaction.mysql');
 const cardModel = {
-    async createItem(inforItem, cb) {
-        const { description, nameFlashCard, idFolder, listCard } = inforItem;
+    async createItem({description, nameFlashCard, idFolder, listCard }, cb) {
         try {
 
             await withTransaction(async (connection) => {
@@ -35,7 +34,7 @@ const cardModel = {
                     }
                 }
             })
-            cb(null, inforItem)
+            cb(null, {description, nameFlashCard, idFolder, listCard })
         } catch (error) {
             cb(error, null)
         }
@@ -57,24 +56,30 @@ const cardModel = {
             cb(error, null)
         }
     },
-    async editItem(newFlashCard, cb) {
-        const { newNameFlashCard, newDescription, newListCard, idFlashCard, idFolder } = newFlashCard;
+    async editItem({idFolder,idFlashCard , nameFlashCard , listCard , description}, cb) {
         try {
             const result = await withTransaction(async (connection) => {
                 // edit flashcard 
-                await connection.query(editFlashCard, [newNameFlashCard, newDescription, idFlashCard, idFolder]);
-                const [listCard] = await connection.query(getListCardsQuery, [idFlashCard]);
-                for (const i in newListCard) {
-                    const { front_card, back_card, is_hidden, image_card } = newListCard[i];
-                    const [status] = await connection.query(editCardQuery, [front_card, back_card, is_hidden, image_card, listCard[i].id_card, idFlashCard])
+                await connection.query(editFlashCard, [nameFlashCard, description, idFlashCard, idFolder]);
+                const [listCards] = await connection.query(getListCardsQuery, [idFlashCard]);
+                
+                if(Object.keys(listCards).length == 0  ){
+                    throw new Error('the idFlash is not exsit')
+                }
+                
+               
+                for (const i in listCards) {
+                    const {id_card , id_flash_card} = listCards[i]
+                    const { front_card, back_card, image_card } = listCard[i];
+                    
+                    const [status] = await connection.query(editCardQuery, [front_card, back_card, image_card, id_card, id_flash_card])
                     if (status.affectedRows == 0) {
                         throw new Error('the edition have some error')
                     }
                 }
                 return listCard
             });
-
-            cb(null, newFlashCard)
+            cb(null,{idFolder,idFlashCard , nameFlashCard ,  description , result } )
         } catch (error) {
             console.log(error)
             cb(error, null)

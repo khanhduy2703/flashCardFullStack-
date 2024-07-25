@@ -27,39 +27,7 @@ const getResquestUser = (req,res,next)=>{
     })
 
 }
-//approve Account User
-const checkReqRegister = (req, res, next) => {
-    const {idUser} = req.params
-    let {isStatus} = req.body
-    const status = {
-        accept : 1 , 
-        reject : 2 ,
-    }
-    const  inforUser = {idUser , 
-        statusReq : isStatus = 'accept' ? status.accept :  status.reject}
-        
-   if(inforUser.statusReq == 1 ){
-    adminModel.setStatusUser(inforUser,(err,data)=>{
-        if(err){
-            return res.status(500).json({
-                status: "error",
-                message: err
-            })
-        }
-        return res.status(200).json({
-            status: "sucess",
-            message:"the account accepted "
-        })
-    })
-   }else {
-    return res.status(200).json({
-        status: "sucess",
-        message:"the account rejected "
-    })
-   } 
-   
- 
-}
+
 const banUser = (req,res,next)=>{ 
     const {idUser} = req.params;
     adminModel.banUser(idUser,(err, data)=>{
@@ -77,10 +45,26 @@ const banUser = (req,res,next)=>{
         })
     })
 }
+const  veridateEmail = (req, res , next)=>{
+    const {id} = req.params
+    adminModel.confirmEmail(id,(err,data)=>{
+        if(err){
+            return res.status(500).json({
+                status : 'error',
+                message: err.message
+            })
+        }
+        return res.status(200).json({
+            status : 'success',
+            message: data.message
+        })
+
+    })
+}
 
 module.exports = {
     adminController,
     getResquestUser,
-    checkReqRegister,
-    banUser
+    banUser,
+    veridateEmail
 }

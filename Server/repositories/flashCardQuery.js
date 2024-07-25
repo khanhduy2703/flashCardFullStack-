@@ -7,7 +7,7 @@ const getFlashcardByName = `SELECT * FROM ${DB_NAME}.${DB_TABLE_FLASHCARD} WHERE
 const createNewFlashCard =
   `INSERT INTO ${DB_NAME}.${DB_TABLE_FLASHCARD} (${nameFlashCard} , ${idFolder} ,${description}) VALUES (?,?,?) `
 const editFlashCard =
-  `UPDATE ${DB_NAME}.${DB_TABLE_FLASHCARD} SET ${nameFlashCard} = ? , ${description} = ? WHERE ${idFlashCard} = ?  and ${idFlashCard} = ? `
+  `UPDATE ${DB_NAME}.${DB_TABLE_FLASHCARD} SET ${nameFlashCard} = ? , ${description} = ? WHERE ${idFlashCard} = ?  `
 const deleteFlashCard =
   `DELETE FROM ${DB_NAME}.${DB_TABLE_FLASHCARD} WHERE ${idFlashCard} = ? and ${idFolder} = ? `
 const restStatusFlashCardQuery =

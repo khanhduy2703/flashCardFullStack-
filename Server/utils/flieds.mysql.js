@@ -4,6 +4,7 @@ const tableUser = {
     email : "email",
     phone:"phone",
     status:"status",
+    validateEmail:"validate_email",
     createdAt:"create_at"
 }
 const tableFolder = {

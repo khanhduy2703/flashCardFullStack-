@@ -11,7 +11,7 @@ const register = ( req , res , next) =>{
         password: joi.string()
             .trim()
             .min(8)
-            .max(16)
+            .max(50)
             .pattern(RegExp(/^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>])/)) // check password have to A form Z , anh exsit one charater specical
             .required(),
         email : joi.string()
@@ -26,9 +26,28 @@ const register = ( req , res , next) =>{
     validationHandle(req,res,next,shema)
 
 }
+const login = (req,res,next)=>{
+    const shema  =  joi.object({
+        account: joi.string()
+            .trim()
+            .min(1)
+            .max(50)
+            .alphanum()
+            .required(),
+        password: joi.string()
+            .trim()
+            .min(8)
+            .max(50)
+            .pattern(RegExp(/^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>])/))
+            .required(),
+    })
+    validationHandle(req,res,next, shema)
+
+}
 
 
 
 module.exports = {
-    register
+    register,
+    login
 }

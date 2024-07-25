@@ -1,9 +1,7 @@
-const pool = require("../config/connectDB");
 const withTransaction = require("../service/withTransaction.mysql");
 const {
   getResquestQuery,
   setStatusUser,
-  deleteRequest,
   banFolder,
   banFlashCard,
   banCard,
@@ -13,7 +11,10 @@ const { error } = require("console");
 const adminModel = {
   async getResquest(cb) {
     try {
-      const [listRequest] = await pool.query(getResquestQuery);
+      await withTransaction(async (connection) => {
+
+        const [listRequest] = await connection.query(getResquestQuery);
+      })
       cb(null, listRequest);
     } catch (error) {
       cb(error, null);
@@ -34,7 +35,7 @@ const adminModel = {
         }
 
         // ban flashCard
-        const [resultFlashCard] = await connection.query(banFlashCard, [0,idUser]);
+        const [resultFlashCard] = await connection.query(banFlashCard, [0, idUser]);
         if (resultFlashCard.affectedRows == 0) {
           throw new Error("error at ban flashCard , roll back");
         }
@@ -46,10 +47,10 @@ const adminModel = {
         }
         return result
       });
-      cb(null, { idUser  });
+      cb(null, { idUser });
     } catch (error) {
       cb(error, null);
     }
-  },
+  }
 };
 module.exports = adminModel;

@@ -9,7 +9,7 @@ const createNewListCardQuery =
 const getListCardsQuery =
   `SELECT * FROM ${DB_NAME}.${DB_TABLE_CARD} WHERE ${idFlashCard}  = ?`;
 const editCardQuery =
-  `UPDATE ${DB_NAME}.${DB_TABLE_CARD} SET ${frontCard} = ? , ${backCard} = ?  , ${isHidden} = ? , ${imageCard} = ?   WHERE ${idCard} = ? and ${idFlashCard} = ?   `;
+  `UPDATE ${DB_NAME}.${DB_TABLE_CARD} SET ${frontCard} = ? , ${backCard} = ?   , ${imageCard} = ?   WHERE ${idCard} = ?  and  ${idFlashCard} = ?   `;
 const deleteCardQuery =
   `DELETE FROM ${DB_NAME}.${DB_TABLE_CARD} WHERE  ${idFlashCard} = ?  `;
 const restStatusCardQuery =

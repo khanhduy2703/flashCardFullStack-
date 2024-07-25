@@ -32,15 +32,10 @@ const createCardsController = (req, res, next) => {
             message: ` the ${nameFolder}  is not difine`
         })
     } else {
-        const inforCard = {
-            nameFlashCard: nameFlashCard.trim(),
-            idFolder: idFolder.trim(),
-            description: description.trim(),
-            listCard: JSON.parse(listCard)
-        }
+        
 
 
-        flashCardModel.createItem(inforCard, (err, data) => {
+        flashCardModel.createItem({idFolder, description , nameFlashCard , listCard}, (err, data) => {
             if (err) {
                 return res.status(500).json({
                     status: "error",
@@ -59,9 +54,9 @@ const createCardsController = (req, res, next) => {
 
 const editFlashCardController = (req, res, next) => {
     const {idFolder,idFlashCard} = req.params
-    const { newNameFlashCard, newListCard, newDescription } = req.body
-    const newFlashCard = { newNameFlashCard, newDescription,idFlashCard,idFolder,newListCard: JSON.parse(newListCard) }
-    flashCardModel.editItem(newFlashCard, (err, data) => {
+    const { nameFlashCard, listCard, description } = req.body
+ 
+    flashCardModel.editItem({idFolder,idFlashCard , nameFlashCard , listCard , description}, (err, data) => {
 
         if (err) {
             return res.status(404).json({

@@ -1,4 +1,4 @@
-const { DB_NAME, DB_TABLE_REQUEST_USER, DB_TABLE_USER, DB_TABLE_FOLDER, DB_TABLE_FLASHCARD, DB_TABLE_CARD } = require('../utils/secrets');
+const { DB_NAME, DB_TABLE_REQUEST_USER, DB_TABLE_USER, DB_TABLE_FOLDER, DB_TABLE_FLASHCARD, DB_TABLE_CARD ,  } = require('../utils/secrets');
 
 const getResquestQuery = `SELECT * FROM ${DB_NAME}.${DB_TABLE_REQUEST_USER}`
 const deleteRequest = `DELETE FROM ${DB_NAME}.${DB_TABLE_REQUEST_USER} WHERE id_user = ? `
@@ -16,11 +16,12 @@ JOIN ${DB_NAME}.${DB_TABLE_FOLDER} ON ${DB_NAME}.${DB_TABLE_FLASHCARD}.id_folder
 SET ${DB_NAME}.${DB_TABLE_CARD}.is_hidden = ?
 WHERE ${DB_NAME}.${DB_TABLE_FOLDER}.id_user = ? `
 
+
 module.exports = {
     getResquestQuery,
     deleteRequest,
     setStatusUser,
     banFolder,
     banFlashCard,
-    banCard
+    banCard,
 }
